@@ -8,7 +8,13 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    # 1. Cấu hình Matrix Strategy chạy trên 3 hệ điều hành
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    # 2. Gọi biến matrix.os vào đây
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout Source Code
@@ -21,16 +27,13 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    # Thực thi vòng đời Maven (chạy test và package)
-    # Lệnh 'package' sẽ tự động chạy qua pha 'test' trước khi đóng gói ra file .jar
     - name: Run Maven Test and Package
       run: mvn clean package checkstyle:check
 
-    # Triển khai action upload-artifact để lưu giữ tệp .jar
+    # 3. Thêm hậu tố OS vào tên file để không bị ghi đè lên nhau
     - name: Upload JAR Artifact
       uses: actions/upload-artifact@v4
-      # Cờ if: always() đảm bảo artifact vẫn được lưu ngay cả khi test bị lỗi (tùy chọn)
       with:
-        name: BankSystem-Executable-JAR
+        name: BankSystem-Executable-JAR-${{ matrix.os }}
         path: target/*.jar
-        retention-days: 7 # Giữ file trên GitHub trong 7 ngày
+        retention-days: 7
