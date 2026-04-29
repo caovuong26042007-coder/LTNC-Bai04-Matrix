@@ -10,6 +10,7 @@ jobs:
   build-and-test:
     # 1. Cấu hình Matrix Strategy chạy trên 3 hệ điều hành
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     
