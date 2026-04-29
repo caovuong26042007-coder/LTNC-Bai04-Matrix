@@ -8,12 +8,9 @@ import org.junit.Test;
 public class PathTest {
 
     @Test
-    public void testWindowsPath() {
-        // dùng dấu gạch chéo ngược (\) cứng của Windows
-        File file = new File("data\\customers.txt");
-
-        // Trên Windows: hệ thống hiểu data là thư mục cha, trả về data. (Test Pass)
-        // Trên Linux/Mac: hệ thống coi "\" chỉ là một ký tự trong tên file, trả về null. (Test Fail)
+    public void testMultiPlatformPath() {
+       // dùng file seperator
+        File file = new File("data" + File.separator + "customers.txt");
         Assert.assertEquals("data", file.getParent());
     }
 }
